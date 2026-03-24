@@ -1,143 +1,196 @@
+/* Custom variables for theme consistency */
 :root {
-    --glass-bg: rgba(255, 255, 255, 0.08);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --pink-glow-vibrant: #ff007f; /* Vibrant pink for the intense glow */
-    --accent-pink-soft: rgba(255, 182, 193, 0.3); /* For text/headings */
+    /* Color Palette */
+    --deep-bg: #101014;           /* Very dark, contrasting background */
+    --glass-fill: rgba(255, 255, 255, 0.12); /* Semi-transparent white core */
+    --glass-border: rgba(255, 255, 255, 0.25); /* Bright edge highlight */
+    
+    /* Glow/Light Settings */
+    --pink-glow-primary: rgba(255, 182, 193, 1);    /* Core pink color (Light Pink) */
+    --pink-glow-spread: rgba(255, 182, 193, 0.45);   /* Emitted light cloud */
+    --bright-white-peak: rgba(255, 255, 255, 0.9);   /* Bright instant of tap */
+    
+    /* Effects */
+    --standard-blur: blur(25px); /* Mimics the high-quality diffusion from reference */
 }
 
-/* Widescreen Container (16:9 Aspect Ratio) */
-.main-widescreen-container {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+/* Global Reset and base styling */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body, html {
+    width: 100%; height: 100%;
+    overflow: hidden; /* Necessary to contain full-screen overlays */
+    font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+    background-color: var(--deep-bg);
+}
+
+/* --- LOCK SCREEN SPECIFIC STYLES --- */
+
+#lock-screen {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1000; /* Ensures it sits on top */
+    background: radial-gradient(circle at center, rgba(30,30,40,0.4) 0%, rgba(10,10,15,1) 80%);
+}
+
+/* Vignette adds depth and focus to the numpad */
+.lock-vignette {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: radial-gradient(circle at center, transparent 30%, black 100%);
+    pointer-events: none; /* Allows interaction 'through' the overlay */
+}
+
+/* Defines the primary physical 'glass' rectangle from reference */
+.glass-numpad-container {
     position: relative;
-    background-color: #121212;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Base Style for All Glass Containers (Mirrors Control Center image) */
-.glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(25px); /* Increased blur for deep glass effect */
-    -webkit-backdrop-filter: blur(25px);
+    padding: 50px 30px;
+    border-radius: 35px; /* Rounded corners match reference images */
     border: 1.5px solid var(--glass-border);
-    border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-}
-
-/* 1. PASSWORD SCREEN */
-#password-screen {
-    position: absolute;
-    inset: 0;
-    z-index: 10;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* Soft pink/red gradient in the centre */
-    background: radial-gradient(circle at center, var(--accent-pink-soft) 0%, #121212 70%);
-}
-
-.glass-pin-card {
-    extend: .glass; /* Inherit glass properties */
-    padding: 30px;
+    background-color: var(--glass-fill);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
     text-align: center;
-    max-width: 320px;
+    
+    /* KEY GLASSMOPHISM PROPERTIES */
+    backdrop-filter: var(--standard-blur);
+    -webkit-backdrop-filter: var(--standard-blur); /* Safari support */
 }
 
-.prompt-text {
+.numpad-title {
     color: white;
-    font-size: 1.2rem;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
+    letter-spacing: 4px; /* Stylish and clear */
+    text-transform: uppercase;
+    font-weight: 300;
+    margin-bottom: 35px;
+    opacity: 0.8;
 }
 
-.numpad {
+/* Standard phone grid layout */
+.numpad-grid {
     display: grid;
-    grid-template-columns: repeat(3, 80px);
-    gap: 15px;
+    grid-template-columns: repeat(3, 75px);
+    gap: 20px;
     justify-content: center;
 }
 
-.num-btn {
-    width: 80px;
-    height: 80px;
+/* Individual translucent buttons */
+.glass-btn {
+    width: 75px; height: 75px;
+    border-radius: 50%; /* Modern circular keys */
+    border: 1px solid var(--glass-border);
+    background-color: rgba(255, 255, 255, 0.03); /* Nearly transparent base */
+    color: white;
     font-size: 1.8rem;
+    font-weight: 400;
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.1s ease;
+    transition: all 0.2s ease;
+    
+    /* Each button needs its own slight blur */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
-.action-btn { font-size: 1.4rem; color: #ffcccc; }
-
-/* The Intense Pink Button Glow (On Tap) */
-.num-btn.glow-on-tap {
-    background: var(--pink-glow-vibrant);
-    border-color: #ff66b2;
-    box-shadow: 0 0 25px 5px var(--pink-glow-vibrant);
-    transform: scale(0.95);
-    transition: 0.05s ease;
+/* THE EMITTED LIGHT & GLOW EFFECT (Triggered by JS) */
+/* Requires radial gradients to create a distinct light 'blob' on and around the key */
+.glass-btn.active-glow {
+    border-color: var(--pink-glow-primary);
+    transform: scale(0.96); /* Physical click sensation */
+    color: var(--bright-white-peak); /* Internal brightness peak */
+    
+    /* Multiple layers of shadow mimic light diffusion on glass */
+    box-shadow: 
+        /* 1. Bright glow within the button */
+        0 0 15px var(--pink-glow-primary), 
+        /* 2. Soft, wide, physical light emission 'cloud' behind the button */
+        0 0 45px 5px var(--pink-glow-spread); 
+        
+    /* 3. The surface of the button itself shifts towards pink */
+    background: radial-gradient(circle at center, var(--pink-glow-primary) 0%, transparent 80%);
 }
 
-/* PIN Dots Display */
-.pin-display {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 25px;
+.clear-btn {
+    color: #ffcccc; /* Soft red for functional clarity */
+    border-color: rgba(255, 100, 100, 0.2);
 }
 
-.dot-empty {
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    border: 1.5px solid #666;
+/* --- MAIN CONTENT / MEDIA PLAYER STYLES --- */
+
+/* Initially hidden state with smooth transition setup */
+.fade-in-hidden {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
 }
-
-.dot-filled {
-    border-color: var(--pink-glow-vibrant);
-    background: var(--pink-glow-vibrant);
-    box-shadow: 0 0 8px var(--pink-glow-vibrant);
-}
-
-
-/* 2. MAIN VIDEO PAGE */
-.hidden { display: none !important; }
 
 #main-content {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    overflow-y: auto; /* Allows content longer than screen height */
+}
+
+/* The UP Light Pink Header */
+.top-pink-ui {
     width: 100%;
-    height: 100%;
-    position: relative;
-    z-index: 5;
-    background: radial-gradient(circle at center, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-.glass-video-card {
-    extend: .glass; /* Inherit glass properties */
-    width: 90%;
-    max-width: 900px;
-    height: auto;
-    max-height: 80%;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-}
-
-.main-title {
-    color: var(--accent-pink-soft);
-    text-shadow: 0 0 8px rgba(255, 182, 193, 0.4);
-    margin-bottom: 20px;
+    padding: 30px;
     text-align: center;
-    font-size: 1.5rem;
-    letter-spacing: 1px;
+    margin-bottom: 3vh; /* Responsive spacing */
+    
+    /* Distinct header frosted styling */
+    border-bottom: 1.5px solid rgba(255, 182, 193, 0.3); /* Soft pink border */
+    background-color: rgba(255, 182, 193, 0.04); /* Light pink translucent base */
+    backdrop-filter: var(--standard-blur);
+    -webkit-backdrop-filter: var(--standard-blur);
 }
 
-video {
+.top-pink-ui h1 {
+    color: var(--pink-glow-primary); /* Header text in full light pink */
+    text-shadow: 0 0 20px var(--pink-glow-spread); /* Subtle atmospheric glow */
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    font-weight: 300;
+    font-size: 1.6rem;
+}
+
+/* Centered content layout */
+.player-container {
+    flex-grow: 1; /* Pushes up header and down footer if present */
+    display: flex; justify-content: center; align-items: center;
+    padding: 20px;
+}
+
+/* Large frosted card to contrast and frame the player */
+.video-glass-card {
+    width: 90%; max-width: 900px;
+    padding: 25px;
+    border-radius: 30px;
+    background-color: var(--glass-fill);
+    border: 1.5px solid var(--glass-border);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    
+    /* Re-application of the distinct clear blur from lock screen */
+    backdrop-filter: var(--standard-blur);
+    -webkit-backdrop-filter: var(--standard-blur);
+}
+
+.video-wrapper {
     width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    border-radius: 20px;
+    overflow: hidden; /* Contains the sharp edges of the native video element */
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+#protected-video {
+    width: 100%; height: auto; display: block;
+    aspect-ratio: 16/9; /* Set standard widescreen, adjusts for portrait files */
+}
+
+.video-subtext {
+    color: rgba(255,255,255,0.6);
+    margin-top: 15px;
+    font-weight: 300;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-align: center;
 }
