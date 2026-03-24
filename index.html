@@ -3,50 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liquid Glass Widescreen Vault</title>
+    <title>Unlock the Experience</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="main-widescreen-container">
-        
-        <div id="password-screen">
-            <div class="glass-pin-card">
-                <h2 class="prompt-text">SECURE ACCESS</h2>
-                <div class="pin-display">
-                    <span id="pin-placeholder" class="dot-empty"></span>
-                    <span id="pin-placeholder" class="dot-empty"></span>
-                    <span id="pin-placeholder" class="dot-empty"></span>
-                    <span id="pin-placeholder" class="dot-empty"></span>
-                </div>
-                <div class="numpad">
-                    <button class="num-btn glass" onclick="inputDigit('1')">1</button>
-                    <button class="num-btn glass" onclick="inputDigit('2')">2</button>
-                    <button class="num-btn glass" onclick="inputDigit('3')">3</button>
-                    <button class="num-btn glass" onclick="inputDigit('4')">4</button>
-                    <button class="num-btn glass" onclick="inputDigit('5')">5</button>
-                    <button class="num-btn glass" onclick="inputDigit('6')">6</button>
-                    <button class="num-btn glass" onclick="inputDigit('7')">7</button>
-                    <button class="num-btn glass" onclick="inputDigit('8')">8</button>
-                    <button class="num-btn glass" onclick="inputDigit('9')">9</button>
-                    <button class="num-btn glass action-btn" onclick="clearInput()">C</button>
-                    <button class="num-btn glass" onclick="inputDigit('0')">0</button>
-                    <button class="num-btn glass action-btn" onclick="verifyPassword()">✓</button>
-                </div>
+    <div id="lock-screen">
+        <div class="lock-vignette"></div> <div class="glass-numpad-container">
+            <h2 class="numpad-title">ENTER KEY</h2>
+            
+            <div class="numpad-grid">
+                <button class="glass-btn" onclick="addDigit('1')" data-num="1">1</button>
+                <button class="glass-btn" onclick="addDigit('2')" data-num="2">2</button>
+                <button class="glass-btn" onclick="addDigit('3')" data-num="3">3</button>
+                
+                <button class="glass-btn" onclick="addDigit('4')" data-num="4">4</button>
+                <button class="glass-btn" onclick="addDigit('5')" data-num="5">5</button>
+                <button class="glass-btn" onclick="addDigit('6')" data-num="6">6</button>
+                
+                <button class="glass-btn" onclick="addDigit('7')" data-num="7">7</button>
+                <button class="glass-btn" onclick="addDigit('8')" data-num="8">8</button>
+                <button class="glass-btn" onclick="addDigit('9')" data-num="9">9</button>
+                
+                <div class="empty-space"></div> <button class="glass-btn" onclick="addDigit('0')" data-num="0">0</button>
+                <button class="glass-btn clear-btn" onclick="resetInput()">C</button>
             </div>
         </div>
+    </div>
 
-        <div id="main-content" class="hidden">
-            <div class="glass-video-card">
-                <h1 class="main-title">NOW PLAYING: FUN VIDEO</h1>
-                <div class="media-wrapper">
-                    <video id="main-video" controls>
+    <div id="main-content" class="fade-in-hidden">
+        
+        <header class="top-pink-ui">
+            <h1>PRIVATE VIEWING</h1>
+        </header>
+
+        <main class="player-container">
+            <div class="video-glass-card">
+                <div class="video-wrapper">
+                    <video id="protected-video" controls>
                         <source src="video.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                 </div>
+                <p class="video-subtext">Authorized Streaming Only</p>
             </div>
-        </div>
+        </main>
     </div>
 
     <script src="script.js"></script>
