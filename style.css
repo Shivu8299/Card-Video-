@@ -1,0 +1,98 @@
+:root {
+    --glass: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --pink-glow: #ffb6c1;
+    --dark-bg: #0f0f0f;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--dark-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Background Animation */
+body::before {
+    content: "";
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(255,182,193,0.1) 0%, rgba(15,15,15,1) 70%);
+    z-index: -1;
+}
+
+/* Glass Panels */
+.glass-container, .video-glass-card {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    padding: 40px;
+    text-align: center;
+}
+
+/* Numpad Styling */
+.numpad {
+    display: grid;
+    grid-template-columns: repeat(3, 70px);
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.num-btn {
+    width: 70px;
+    height: 70px;
+    border-radius: 15px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.num-btn:active, .num-btn.glow-active {
+    background: rgba(255, 182, 193, 0.4);
+    box-shadow: 0 0 15px var(--pink-glow);
+    border-color: var(--pink-glow);
+    transform: scale(0.9);
+}
+
+/* Main Content Styles */
+.hidden { display: none; }
+
+#main-content {
+    width: 90%;
+    max-width: 800px;
+}
+
+.video-glass-card {
+    border: 1px solid rgba(255, 182, 193, 0.3); /* Subtle pink border */
+}
+
+.main-title {
+    color: var(--pink-glow);
+    text-shadow: 0 0 10px rgba(255, 182, 193, 0.5);
+    margin-bottom: 30px;
+}
+
+video {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+.prompt-text {
+    color: white;
+    letter-spacing: 2px;
+}
